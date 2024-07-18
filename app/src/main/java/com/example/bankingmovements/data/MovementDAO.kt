@@ -9,7 +9,7 @@ import com.example.bankingmovements.utils.DatabaseManager
 class MovementDAO (val context: Context) {
 
     private val databaseManager: DatabaseManager = DatabaseManager(context)
-    private val projection = arrayOf(BaseColumns._ID, Movement.COLUMN_NAME_QUANTITY, Movement.COLUMN_NAME_DATE)
+    private val projection = arrayOf(BaseColumns._ID, Movement.COLUMN_NAME_QUANTITY, Movement.COLUMN_NAME_DATE, Movement.COLUMN_NAME_POSITIVE)
 
     fun insert(movement: Movement) {
         val db = databaseManager.writableDatabase
@@ -17,6 +17,7 @@ class MovementDAO (val context: Context) {
         val values = ContentValues()
         values.put(Movement.COLUMN_NAME_QUANTITY, movement.quantity)
         values.put(Movement.COLUMN_NAME_DATE, movement.date)
+        values.put(Movement.COLUMN_NAME_POSITIVE, movement.positive)
 
         val newRowId = db.insert(Movement.TABLE_NAME, null, values)
         movement.id = newRowId.toInt()
@@ -28,6 +29,7 @@ class MovementDAO (val context: Context) {
         val values = ContentValues()
         values.put(Movement.COLUMN_NAME_QUANTITY, movement.quantity)
         values.put(Movement.COLUMN_NAME_DATE, movement.date)
+        values.put(Movement.COLUMN_NAME_POSITIVE, movement.positive)
 
         val updatedRows = db.update(
             Movement.TABLE_NAME,
@@ -62,8 +64,9 @@ class MovementDAO (val context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
             val quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(Movement.COLUMN_NAME_QUANTITY))
             val date = cursor.getString(cursor.getColumnIndex(Movement.COLUMN_NAME_DATE))
+            val positive = cursor.getInt(cursor.getColumnIndex(Movement.COLUMN_NAME_POSITIVE)) == 1
 
-            movement = Movement(id, quantity, date)
+            movement = Movement(id, quantity, date, positive)
         }
         cursor.close()
         db.close()
@@ -89,8 +92,9 @@ class MovementDAO (val context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
             val quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(Movement.COLUMN_NAME_QUANTITY))
             val date = cursor.getString(cursor.getColumnIndex(Movement.COLUMN_NAME_DATE))
+            val positive = cursor.getInt(cursor.getColumnIndex(Movement.COLUMN_NAME_POSITIVE)) == 1
 
-            val movement = Movement(id, quantity, date)
+            val movement = Movement(id, quantity, date, positive)
             movements.add(movement)
         }
         cursor.close()

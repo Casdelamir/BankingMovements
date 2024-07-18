@@ -9,6 +9,7 @@ import com.example.bankingmovements.data.MovementDAO
 import com.example.bankingmovements.databinding.ActivityAddNewMovementBinding
 import com.example.bankingmovements.databinding.ActivityMainBinding
 import java.lang.StringBuilder
+import java.time.LocalDate
 
 class AddNewMovementActivity : AppCompatActivity() {
 
@@ -23,18 +24,27 @@ class AddNewMovementActivity : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener() {
             val amount = binding.textInputQuantity.text.toString().toDouble()
+            val positive = !binding.checkbox.isChecked
 
-            val year = binding.datePicker1.year.toString()
-            val month = binding.datePicker1.month.toString()
+            val currentDate = LocalDate.now()
 
-            val dayOfMonth = binding.datePicker1.dayOfMonth.toString()
-            val date = "$year-$month-$dayOfMonth"
+            val year = binding.datePicker1.year
+            val month = binding.datePicker1.month + 1
+            val dayOfMonth = binding.datePicker1.dayOfMonth
 
-            val movement = Movement(-1, amount, date)
+            val selectedDate = LocalDate.of(year, month, dayOfMonth)
 
-            movementDAO.insert(movement)
-            Toast.makeText(this, "Movement is added",Toast.LENGTH_SHORT).show()
-            finish()
+            if (selectedDate.isBefore(currentDate)) {
+                Toast.makeText(this, "This date cant be selected. Select another date.", Toast.LENGTH_LONG).show()
+            }else {
+                val date = "$year-$month-$dayOfMonth"
+
+                val movement = Movement(-1, amount, date, positive)
+
+                movementDAO.insert(movement)
+                Toast.makeText(this, "Movement is added", Toast.LENGTH_LONG).show()
+                finish()
+            }
         }
     }
 }

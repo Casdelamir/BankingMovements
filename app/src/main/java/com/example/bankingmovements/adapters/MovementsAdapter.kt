@@ -2,6 +2,7 @@ package com.example.bankingmovements.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bankingmovements.R
 import com.example.bankingmovements.data.Movement
@@ -28,6 +29,10 @@ class MovementsAdapter (private var dataSet: List<Movement>) : RecyclerView.Adap
         fun render(movement: Movement) {
             binding.quantity.text = itemView.context.getString(R.string.quantity, String.format("%.2f", movement.quantity))
             binding.date.text = movement.date
+            if (!movement.positive) {
+            binding.iconMovement.setImageResource(R.drawable.baseline_remove_circle_24)
+                binding.iconMovement.setColorFilter(ContextCompat.getColor(itemView.context, R.color.red))
+            }
         }
     }
 }

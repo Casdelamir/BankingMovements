@@ -9,7 +9,9 @@ tools:context=".activities.MainActivity">
 <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    android:paddingBottom="78dp"
+    />
 
     <!-- FloatingActionButton in the bottom right corner -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -22,11 +24,21 @@ tools:context=".activities.MainActivity">
         android:layout_gravity="bottom|right"/>
 
     <!-- TextView in the bottom left corner -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        android:backgroundTint="@color/pink">
     <TextView
+        android:id="@+id/balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:text="Balance"
-        android:layout_gravity="bottom|left"/>
+        />
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var adapter: MovementsAdapter
-    lateinit var movements: List<Movement>
     lateinit var movementDAO: MovementDAO
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         movementDAO = MovementDAO(this)
-        movements = movementDAO.findAll()
+        val movements = movementDAO.findAll()
 
         adapter = MovementsAdapter(movements)
 
@@ -31,11 +30,26 @@ class MainActivity : AppCompatActivity() {
         binding.createButton.setOnClickListener() {
             navigateToCreateNewMovementPage()
         }
+        setBalance(movements)
+    }
+
+    private fun setBalance(movements: List<Movement>) {
+        var balance = 0.0
+        movements.forEach {
+            if (it.positive) {
+                balance += it.quantity
+            } else {
+                balance -= it.quantity
+            }
+        }
+            binding.balance.text = String.format("%.2f $", balance)
     }
 
     override fun onResume() {
         super.onResume()
-        adapter.updateData(movementDAO.findAll())
+        val newMovements = movementDAO.findAll()
+        adapter.updateData(newMovements)
+        setBalance(newMovements)
     }
 
     private fun navigateToCreateNewMovementPage() {
